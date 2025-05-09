@@ -3,15 +3,23 @@ body{
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: rgb(52, 52, 52);
+    background-color: #F2EBF2;
 }
 
 a{
     text-decoration: none;
     color: black;
 }
+
+header{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+    font-size: 0.9rem;
+}
 canvas{
-    border: 1px solid black;
+    border: 1px solid #C4C4C4;
 }
 
 .workspace{
@@ -35,4 +43,64 @@ canvas{
 #stroke{
     width: 25px;
     height: 25px;
+}
+
+
+.toolbar{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: fit-content;
+    gap: 0.5rem;
+    background-color: #535353;
+    padding: 0.2rem;
+    border: 2px solid #F25A29;
+}
+
+.toolbar button{
+    padding: 0.2rem;
+    background-color:  #535353;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.toolbar svg{
+    fill: #C4C4C4;
+    width: 20px;
+    height: 20px;
+}
+
+
+
+.colors-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border: 1px solid #535353;
+    padding: 0.1rem;
+}
+
+.colors-container, .fill-stroke{
+    margin-top: 0.5rem;
+}
+
+.layers{
+width: 100%;
+min-height: 40%;
+padding: 0.5rem;
+background-color: #6E6F73;
+
+}
+.layer{
+    display: flex;
+    color: white;
+    border: 1px solid #C4C4C4;
+    margin-bottom: 0.1rem;
+    padding: 0.1rem;
+}
+
+.layer svg{
+    fill: white;
+    margin-right: 0.2rem;
+    width: 15px;
 }

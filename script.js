@@ -1,95 +1,106 @@
 let canvas = document.querySelector('canvas');
 canvas.width =  1080;
-canvas.height = 1080;
-
+canvas.height = 540;
 let c = canvas.getContext('2d');
 
+
+/* ______________________________________________ Variables __________________________________________ */
+
+// toolbar buttons
 let tool = "line";
 let line = document.getElementById('line');
 let rect = document.getElementById('rect');
 let circ = document.getElementById('circ');
 let clear = document.getElementById('clear');
+
+// undo and redo
+const undo = document.getElementById('undo');
+const redo = document.getElementById('redo');
+
+// stroke and fill
+let stroke = 1;
+let fill = "white";
 let stroke_color = 'black';
+
+// stroke plus and minus
+const strokePlus = document.getElementById('strokePlus');
+const strokeMinus = document.getElementById('strokeMinus');
+
+// color selection
 const selec_fill = document.getElementById('fill');
 const selec_stroke = document.getElementById('stroke');
+
+
+// layers
+const elements = [];
+const removed_items = [];
+const layers = document.getElementById('layers');
+
+// colors
 let selec_color = true;
 const fillButton = document.getElementById('fill');
-    
 
+// drawing
+let start = false;
+let startX, startY;
+
+
+/* ______________________________________________ Event listeners __________________________________________ */
+
+window.addEventListener('load', () => {
+    elements.push(new Rectangle(0, 0, canvas.width, canvas.height, stroke, fill, stroke_color));
+    draw();
+})
+
+// toolbar Listeners
+line.addEventListener('click', () => {tool = 'line'});
+rect.addEventListener('click', () => {tool = 'rect'});
+circ.addEventListener('click', () => {tool = 'circ'});
+clear.addEventListener('click', () => {
+    elements.length = 0;
+    elements.push(new Rectangle(0, 0, canvas.width, canvas.height, stroke, fill, stroke_color));
+    draw();
+});
+
+// color selection
 selec_fill.addEventListener('click', () => {
+    if (!selec_color) {selec_fill.style.border = '3px solid #F25A29'; selec_stroke.style.border = 'none';}
     selec_color = true;
 })
 
-
 selec_stroke.addEventListener('click', () => {
+    if (selec_color) {selec_stroke.style.border = '3px solid #F25A29'; selec_fill.style.border = 'none';}
     selec_color = false;
 })
 
 
-function setColor(color){
-if (selec_color){
-    fill = color;
-    selec_fill.style = `background-color: ${fill}`
-}
-else {
-    stroke_color = color
-    selec_stroke.style = `background-color: ${stroke_color}`
-};
-}
+// undo and redo
+undo.addEventListener('click', () => {
+    removed_items.push(elements.pop());
+    draw();
+})
 
-let stroke = 1;
-let fill = "rgb(191, 255, 0)";
-const elements = [];
+redo.addEventListener('click', () => {
+    elements.push(removed_items.pop());
+    draw();
+})
 
 
-clear.addEventListener('click', () => {c.clearRect(0, 0, canvas.width, canvas.height); elements.length = 0});
-line.addEventListener('click', () => {tool = 'line'});
-rect.addEventListener('click', () => {tool = 'rect'});
-circ.addEventListener('click', () => {tool = 'circ'});
-
-let start = false;
-let startX, startY;
-
-class Rectangle{
-    constructor(x, y, width, height, _stroke, _fill, _stroke_color){
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.stroke = _stroke;
-        this.fill = _fill;
-        this.stroke_color = _stroke_color;
-    }
-}
-
-
-class Circle{
-    constructor(x, y, width, height, _stroke, _fill, _stroke_color){
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.stroke = _stroke;
-        this.fill = _fill;
-        this.stroke_color = _stroke_color;
-    }
-}
-
-
-document.addEventListener('mousedown', (e) =>{
+// drawing
+canvas.addEventListener('mousedown', (e) =>{
     startX = e.clientX - canvas.offsetLeft;
     startY = e.clientY - canvas.offsetTop;
     start = true;
 })
 
-document.addEventListener('mousemove', (e) => {
+canvas.addEventListener('mousemove', (e) => {
     if (tool == 'line'){
         c.strokeStyle = stroke_color;
         drawLines({clientX: e.clientX - canvas.offsetLeft, clientY: e.clientY - canvas.offsetTop});
     }
 })
 
-document.addEventListener('mouseup', (e) => {
+canvas.addEventListener('mouseup', (e) => {
     start = false;
     c.beginPath();
     switch (tool){
@@ -103,6 +114,30 @@ document.addEventListener('mouseup', (e) => {
             break;
     }
 })
+
+// stroke
+strokePlus.addEventListener('click', () => {
+    stroke += 1;
+    c.lineWidth = stroke;
+})
+strokeMinus.addEventListener('click', () => {
+    stroke -= 1;
+    c.lineWidth = stroke;
+})
+
+
+/* ______________________________________________ Functions __________________________________________ */
+
+function setColor(color){
+if (selec_color){
+    fill = color;
+    selec_fill.style = `background-color: ${fill}`
+}
+else {
+    stroke_color = color
+    selec_stroke.style = `background-color: ${stroke_color}`
+};
+}
 
 function drawLines(e){
     if (!start) return;
@@ -125,20 +160,21 @@ function drawCirc(e) {
     draw();
 }
 
-const strokePlus = document.getElementById('strokePlus');
-const strokeMinus = document.getElementById('strokeMinus');
-strokePlus.addEventListener('click', () => {
-    stroke += 1;
-    c.lineWidth = stroke;
-})
-strokeMinus.addEventListener('click', () => {
-    stroke -= 1;
-    c.lineWidth = stroke;
-})
-
 function draw(){
  c.clearRect(0, 0, canvas.width, canvas.height);
+ layers.innerHTML = '';
  elements.forEach(element => {
+    layers.innerHTML += `<div class="layer">
+    <svg viewBox="0 0 16 16">
+        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+    </svg> 
+
+    <svg viewBox="0 0 16 16">
+        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+    </svg>
+    ${element.id}
+    </div>`
     if (element instanceof Circle){
         c.beginPath();
         c.lineWidth = element.stroke;
