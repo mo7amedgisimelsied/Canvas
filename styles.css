@@ -1,0 +1,38 @@
+
+canvas{
+    border: 1px solid black;
+}
+
+button{
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 0.3rem;
+    border: none;
+    background-color: gray;
+    border-radius: 5px;
+}
+
+.toolbar{
+    /* position: absolute;
+    top: 10px;
+    left: 10px; */
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.1em;
+    width: 100%;
+}
+
+.color-palette{
+    /* position: absolute; */
+    background-color: red;
+}
+
+.color {
+    width: 25px;
+    height: 25px;
+  }
+
+  .colors-container{
+        display: flex;
+  }

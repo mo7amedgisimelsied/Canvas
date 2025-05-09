@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="toolbar" id="toolbar">
+      <button id="line">/</button>
+      <button id="rect">[]</button>
+      <button id="circ">O</button>
+      <button id="fill"></button>
+      <button id="clear">X</button>
+      <div class="stroke">
+        <button id="strokePlus">+</button>
+        <button id="strokeMinus">-</button>
+      </div>
+    </div>
+    <div class="colors-container">
+      <div
+        class="color"
+        style="background-color: black"
+        onclick="fill = 'black'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: red"
+        onclick="fill = 'red'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: green"
+        onclick="fill = 'green'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: blue"
+        onclick="fill = 'blue'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: yellow"
+        onclick="fill = 'yellow'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: orange"
+        onclick="fill = 'orange'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: purple"
+        onclick="fill = 'purple'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: pink"
+        onclick="fill = 'pink'"
+      ></div>
+      <div
+        class="color"
+        style="background-color: brown"
+        onclick="fill = 'brown'"
+      ></div>
+    </div>
+    <canvas></canvas>
+    <script src="script.js"></script>
+  </body>
+</html>
